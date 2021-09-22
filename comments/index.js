@@ -1,10 +1,12 @@
 const express = require("express");
 const { randomBytes } = require("crypto");
+const cors = require("cors");
 
 // store comments in memory
 const commentsByPostId = {};
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 app.get("/posts/:id/comments", (req, res) => {
