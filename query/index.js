@@ -17,10 +17,19 @@ app.post("/events", (req, res) => {
     const { id, title } = event.data;
     postsAndComments[id] = { id, title, comments: [] };
   } else if (event.type === "Comment Created") {
-    const { id, content, postId } = event.data;
+    const { id, content, postId, status } = event.data;
     if (postsAndComments[postId]) {
-      postsAndComments[postId].comments.push({ id, content });
+      postsAndComments[postId].comments.push({ id, content, status });
     }
+  } else if (event.type === "Comment Updated") {
+    const { postId, id, content, status } = event.data;
+    const comments = postsAndComments[postId].comments;
+    const commentIndex = comments.findIndex((comment) => comment.id === id);
+    comments[commentIndex] = {
+      id: id,
+      content: content,
+      status: status,
+    };
   }
   res.send({});
 });
